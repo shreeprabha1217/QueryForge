@@ -48,6 +48,7 @@ public class Dataset {
     private DatasetStatus status;
 
     @Column("created_by")
+    @NotNull 
     private UUID createdBy;
 
     @CreatedDate
