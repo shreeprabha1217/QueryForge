@@ -1,3 +1,4 @@
+
 package com.queryforge.entities;
 
 import com.queryforge.entities.enums.UserRole;
@@ -11,7 +12,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -43,7 +43,6 @@ public class User {
     @Email
     @Size(max = 255)
     @Column("email")
-    @UniqueElements 
     private String email;
 
     @NotNull

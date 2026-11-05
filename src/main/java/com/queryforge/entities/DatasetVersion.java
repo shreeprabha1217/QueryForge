@@ -1,13 +1,19 @@
+
 package com.queryforge.entities;
 
 import com.queryforge.entities.enums.DatasetVersionStatus;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -35,9 +41,11 @@ public class DatasetVersion {
     private UUID datasetId;
 
     @NotNull
+    @Positive
     @Column("version_number")
     private Integer versionNumber;
 
+    @NotBlank
     @Column("storage_location")
     private String storageLocation;
 
@@ -46,6 +54,7 @@ public class DatasetVersion {
     @Column("file_format")
     private String fileFormat;
 
+    @PositiveOrZero
     @Column("file_size_bytes")
     private Long fileSizeBytes;
 
