@@ -1,10 +1,13 @@
+
 package com.queryforge.entities;
 
 import jakarta.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -14,9 +17,9 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
- * Records the exact dataset versions used by each execution (Many-to-Many).
- * Composite Primary Key: (execution_id, dataset_version_id).
- * Business rule: An execution must not reference two versions of the same logical dataset.
+ * Records the exact dataset versions used by each execution.
+ * An execution can reference multiple dataset versions,
+ * but only one version of a particular logical dataset.
  */
 @Table("execution_dataset_versions")
 @Data
@@ -24,7 +27,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExecutionDatasetVersion {
-    @Id 
+
+    @Id
     private UUID id;
 
     @NotNull

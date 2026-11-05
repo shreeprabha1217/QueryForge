@@ -1,11 +1,15 @@
+
 package com.queryforge.entities;
 
 import com.queryforge.entities.enums.ExecutionStatus;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -33,6 +37,7 @@ public class QueryExecution {
     private UUID queryId;
 
     @NotNull
+    @Positive
     @Column("attempt_number")
     private Integer attemptNumber;
 
@@ -51,9 +56,6 @@ public class QueryExecution {
 
     @Column("error_message")
     private String errorMessage;
-
-    @Column("rows_returned")
-    private Long rowsReturned;
 
     @CreatedDate
     @Column("created_at")

@@ -1,14 +1,18 @@
+
 package com.queryforge.entities;
 
 import com.queryforge.entities.enums.DatasetSourceType;
 import com.queryforge.entities.enums.DatasetStatus;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -36,6 +40,7 @@ public class Dataset {
     @Column("name")
     private String name;
 
+    @Size(max = 1000)
     @Column("description")
     private String description;
 
@@ -47,8 +52,8 @@ public class Dataset {
     @Column("status")
     private DatasetStatus status;
 
+    @NotNull
     @Column("created_by")
-    @NotNull 
     private UUID createdBy;
 
     @CreatedDate

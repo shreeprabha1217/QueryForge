@@ -1,11 +1,14 @@
+
 package com.queryforge.entities;
 
 import io.r2dbc.postgresql.codec.Json;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -16,7 +19,7 @@ import java.util.UUID;
 
 /**
  * Stores metadata about the output produced by an execution.
- * Unique constraint on execution_id enforces at most one result per execution.
+ * Each execution can produce at most one logical result.
  */
 @Table("query_results")
 @Data
@@ -33,6 +36,7 @@ public class QueryResult {
     private UUID executionId;
 
     @NotNull
+    @PositiveOrZero
     @Column("row_count")
     private Long rowCount;
 
@@ -43,6 +47,7 @@ public class QueryResult {
     @Column("storage_location")
     private String storageLocation;
 
+    @PositiveOrZero
     @Column("result_size_bytes")
     private Long resultSizeBytes;
 
@@ -53,16 +58,10 @@ public class QueryResult {
     @Column("expires_at")
     private OffsetDateTime expiresAt;
 
-    /**
-     * Helper method to get the JSON string representation of column_metadata.
-     */
     public String getColumnMetadataAsString() {
         return columnMetadata != null ? columnMetadata.asString() : null;
     }
 
-    /**
-     * Helper method to set column_metadata from a raw JSON string.
-     */
     public void setColumnMetadataFromString(String json) {
         this.columnMetadata = json != null ? Json.of(json) : null;
     }

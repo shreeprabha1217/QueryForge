@@ -1,3 +1,4 @@
+
 package com.queryforge.entities;
 
 import jakarta.validation.constraints.NotNull;
@@ -5,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -14,8 +16,9 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
- * Junction table connecting queries and datasets (Many-to-Many).
- * Composite Primary Key: (query_id, dataset_id).
+ * Junction entity connecting queries and datasets.
+ * A query can reference multiple datasets, and a dataset
+ * can be referenced by multiple queries.
  */
 @Table("query_datasets")
 @Data
