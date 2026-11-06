@@ -60,4 +60,6 @@ public class User {
     @LastModifiedDate
     @Column("updated_at")
     private OffsetDateTime updatedAt;
+
+    public Object existsById;
 }
