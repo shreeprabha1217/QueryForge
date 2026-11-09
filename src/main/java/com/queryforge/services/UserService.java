@@ -4,6 +4,7 @@ package com.queryforge.services;
 import org.springframework.stereotype.Service;
 
 import com.queryforge.entities.User;
+import com.queryforge.exceptions.EmailAlreadyExistsException;
 import com.queryforge.repositories.UserRepository;
 
 import reactor.core.publisher.Mono;
@@ -34,7 +35,7 @@ public Mono<User> createUser(User user) {
     return userRepository.findByEmail(user.getEmail())
             .flatMap(existingUser ->
                     Mono.<User>error(
-                            new IllegalArgumentException(
+                            new EmailAlreadyExistsException(
                                     "Email is already registered"
                             )
                     )
