@@ -37,6 +37,7 @@ public Mono<Boolean> userExistsByEmail(String email) {
 public Mono<User> createUser(CreateUserRequest request) {
 
     User user = User.builder()
+            .id(UUID.randomUUID())
             .name(request.name())
             .email(request.email())
             .role(UserRole.USER)
