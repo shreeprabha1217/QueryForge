@@ -3,7 +3,10 @@ package com.queryforge.services;
 
 import org.springframework.stereotype.Service;
 
+import com.queryforge.dto.CreateUserRequest;
 import com.queryforge.entities.User;
+import com.queryforge.entities.enums.UserRole;
+import com.queryforge.entities.enums.UserStatus;
 import com.queryforge.exceptions.EmailAlreadyExistsException;
 import com.queryforge.repositories.UserRepository;
 
@@ -31,7 +34,15 @@ public Mono<Boolean> userExistsByEmail(String email) {
             );
 }
 
-public Mono<User> createUser(User user) {
+public Mono<User> createUser(CreateUserRequest request) {
+
+    User user = User.builder()
+            .name(request.name())
+            .email(request.email())
+            .role(UserRole.USER)
+            .status(UserStatus.ACTIVE)
+            .build();
+
     return userRepository.findByEmail(user.getEmail())
             .flatMap(existingUser ->
                     Mono.<User>error(
@@ -44,6 +55,5 @@ public Mono<User> createUser(User user) {
                     Mono.defer(() -> userRepository.save(user))
             );
 }
-
     
 }

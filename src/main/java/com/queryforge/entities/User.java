@@ -61,5 +61,4 @@ public class User {
     @Column("updated_at")
     private OffsetDateTime updatedAt;
 
-    public Object existsById;
 }
