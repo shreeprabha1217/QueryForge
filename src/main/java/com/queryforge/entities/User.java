@@ -15,9 +15,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -29,7 +32,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements Persistable<UUID> {
 
     @Id
     private UUID id;
@@ -55,10 +58,19 @@ public class User {
 
     @CreatedDate
     @Column("created_at")
-    private OffsetDateTime createdAt;
+    private LocalDate createdAt;
 
     @LastModifiedDate
     @Column("updated_at")
-    private OffsetDateTime updatedAt;
+    private LocalDate updatedAt;
+
+    @Transient
+    @Builder.Default
+    private boolean isNew = false;
+
+    @Override
+    public boolean isNew() {
+        return this.isNew || id == null;
+    }
 
 }
