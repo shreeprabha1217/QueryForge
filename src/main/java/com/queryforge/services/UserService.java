@@ -4,17 +4,18 @@ package com.queryforge.services;
 import org.springframework.stereotype.Service;
 
 import com.queryforge.dto.CreateUserRequest;
+import com.queryforge.dto.UpdateUserRequest;
 import com.queryforge.entities.User;
 import com.queryforge.entities.enums.UserRole;
 import com.queryforge.entities.enums.UserStatus;
 import com.queryforge.exceptions.EmailAlreadyExistsException;
+import com.queryforge.exceptions.UserNotFoundException;
 import com.queryforge.repositories.UserRepository;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Service
@@ -65,6 +66,41 @@ public Mono<User> createUser(CreateUserRequest request) {
 
 public Flux<User> getAllUsers() {
     return userRepository.findAll();
+}
+
+public Mono<User> updateUser(UUID id, UpdateUserRequest request) {
+
+    return userRepository.findById(id)
+            .switchIfEmpty(
+                    Mono.error(new UserNotFoundException("User not found with ID: " + id))
+            )
+            .flatMap(user -> {
+
+                if (request.name() != null) {
+                    user.setName(request.name());
+                }
+
+                if (request.email() == null ||
+                        request.email().equals(user.getEmail())) {
+
+                    return userRepository.save(user);
+                }
+
+                return userRepository.findByEmail(request.email())
+                        .flatMap(existingUser ->
+                                Mono.<User>error(
+                                        new EmailAlreadyExistsException(
+                                                "Email is already registered"
+                                        )
+                                )
+                        )
+                        .switchIfEmpty(
+                                Mono.defer(() -> {
+                                    user.setEmail(request.email());
+                                    return userRepository.save(user);
+                                })
+                        );
+            });
 }
     
 }

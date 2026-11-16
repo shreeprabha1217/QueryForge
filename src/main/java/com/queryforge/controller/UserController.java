@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.queryforge.dto.CreateUserRequest;
+import com.queryforge.dto.UpdateUserRequest;
 import com.queryforge.entities.User;
 import com.queryforge.services.UserService;
 
@@ -46,6 +48,20 @@ public Mono<ResponseEntity<User>> getUserById(
 @GetMapping
 public Flux<User> getAllUsers() {
     return userService.getAllUsers();
+}
+
+@PatchMapping("/{id}")
+public Mono<ResponseEntity<User>> updateUser(
+        @PathVariable UUID id,
+        @Valid @RequestBody UpdateUserRequest request) {
+
+if (request.name() == null && request.email() == null) {
+    return Mono.error(
+            new IllegalArgumentException("At least one field must be provided")
+    );
+}
+    return userService.updateUser(id, request)
+            .map(user -> ResponseEntity.ok(user));
 }
 
 }
