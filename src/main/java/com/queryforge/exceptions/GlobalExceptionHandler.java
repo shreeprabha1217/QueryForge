@@ -27,4 +27,19 @@ public class GlobalExceptionHandler {
                 ResponseEntity.status(HttpStatus.CONFLICT).body(error)
         );
     }
+
+@ExceptionHandler(UserNotFoundException.class)
+public Mono<ResponseEntity<ApiError>> handleUserNotFound(
+        UserNotFoundException exception) {
+
+    ApiError error = new ApiError(
+            HttpStatus.NOT_FOUND.value(),
+            exception.getMessage(),
+            Instant.now()
+    );
+
+    return Mono.just(
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(error)
+    );
+}
 }
