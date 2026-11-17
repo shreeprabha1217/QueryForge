@@ -102,5 +102,22 @@ public Mono<User> updateUser(UUID id, UpdateUserRequest request) {
                         );
             });
 }
+
+public Mono<User> deactivateUser(UUID id) {
+    // Your implementation
+    return userRepository.findById(id)
+     .switchIfEmpty(
+                    Mono.error(new UserNotFoundException("User not found with ID: " + id))
+            )
+            .flatMap(user->{
+                if(user.getStatus() == UserStatus.INACTIVE){
+                    return Mono.error(
+                        new RuntimeException("User is already inactive")
+                    );
+                }
+                user.setStatus(UserStatus.INACTIVE);
+                return userRepository.save(user);
+            });
+}
     
 }
