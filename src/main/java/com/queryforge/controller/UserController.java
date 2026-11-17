@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,6 +62,13 @@ if (request.name() == null && request.email() == null) {
     );
 }
     return userService.updateUser(id, request)
+            .map(user -> ResponseEntity.ok(user));
+}
+
+@DeleteMapping("/{id}")
+public Mono<ResponseEntity<User>> deactivateUser(
+        @PathVariable UUID id) {
+    return userService.deactivateUser(id)
             .map(user -> ResponseEntity.ok(user));
 }
 
