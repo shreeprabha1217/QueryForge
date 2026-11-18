@@ -42,4 +42,34 @@ public Mono<ResponseEntity<ApiError>> handleUserNotFound(
             ResponseEntity.status(HttpStatus.NOT_FOUND).body(error)
     );
 }
+
+@ExceptionHandler(QueryNotFoundException.class)
+public Mono<ResponseEntity<ApiError>> handleQueryNotFound(
+        QueryNotFoundException exception) {
+
+    ApiError error = new ApiError(
+            HttpStatus.NOT_FOUND.value(),
+            exception.getMessage(),
+            Instant.now()
+    );
+
+    return Mono.just(
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(error)
+    );
+}
+
+@ExceptionHandler(IllegalArgumentException.class)
+public Mono<ResponseEntity<ApiError>> handleIllegalArgument(
+        IllegalArgumentException exception) {
+
+    ApiError error = new ApiError(
+            HttpStatus.BAD_REQUEST.value(),
+            exception.getMessage(),
+            Instant.now()
+    );
+
+    return Mono.just(
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error)
+    );
+}
 }
