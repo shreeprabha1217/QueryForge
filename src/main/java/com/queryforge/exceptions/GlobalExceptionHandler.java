@@ -58,6 +58,36 @@ public Mono<ResponseEntity<ApiError>> handleQueryNotFound(
     );
 }
 
+@ExceptionHandler(DatasetNotFoundException.class)
+public Mono<ResponseEntity<ApiError>> handleDatasetNotFound(
+        DatasetNotFoundException exception) {
+
+    ApiError error = new ApiError(
+            HttpStatus.NOT_FOUND.value(),
+            exception.getMessage(),
+            Instant.now()
+    );
+
+    return Mono.just(
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(error)
+    );
+}
+
+@ExceptionHandler(DatasetNameAlreadyExistsException.class)
+public Mono<ResponseEntity<ApiError>> handleDatasetNameAlreadyExists(
+        DatasetNameAlreadyExistsException exception) {
+
+    ApiError error = new ApiError(
+            HttpStatus.CONFLICT.value(),
+            exception.getMessage(),
+            Instant.now()
+    );
+
+    return Mono.just(
+            ResponseEntity.status(HttpStatus.CONFLICT).body(error)
+    );
+}
+
 @ExceptionHandler(IllegalArgumentException.class)
 public Mono<ResponseEntity<ApiError>> handleIllegalArgument(
         IllegalArgumentException exception) {
