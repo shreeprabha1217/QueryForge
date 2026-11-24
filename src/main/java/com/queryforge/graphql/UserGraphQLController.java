@@ -8,6 +8,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import com.queryforge.dto.CreateUserRequest;
+import com.queryforge.dto.UpdateUserRequest;
 import com.queryforge.entities.User;
 import com.queryforge.services.UserService;
 
@@ -37,5 +38,15 @@ public class UserGraphQLController {
     public Mono<User> createUser(@Argument String name, @Argument String email) {
         CreateUserRequest request=new CreateUserRequest(name, email);
         return userService.createUser(request);
+    }
+
+    @MutationMapping 
+    public Mono<User> updateUser(@Argument UUID id, @Argument UpdateUserRequest input) {
+        return userService.updateUser(id, input);
+    }
+
+    @MutationMapping
+    public Mono<User> deactivateUser(@Argument UUID id) {
+        return userService.deactivateUser(id);
     }
 }
